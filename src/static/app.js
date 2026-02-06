@@ -44,6 +44,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Authentication state
   let currentUser = null;
 
+  // Helper function to escape HTML to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // Time range mappings for the dropdown
   const timeRanges = {
     morning: { start: "06:00", end: "08:00" }, // Before school hours
@@ -553,7 +560,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </ul>
       </div>
       <div class="share-buttons">
-        <button class="share-button" data-activity="${name}" data-schedule="${formattedSchedule}" data-description="${details.description}" title="Share this activity">
+        <button class="share-button" data-activity="${escapeHtml(name)}" data-schedule="${escapeHtml(formattedSchedule)}" data-description="${escapeHtml(details.description)}" title="Share this activity">
           <span class="share-icon">🔗</span> Share
         </button>
       </div>
