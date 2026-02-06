@@ -552,6 +552,11 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")}
         </ul>
       </div>
+      <div class="share-buttons">
+        <button class="share-button" data-activity="${name}" data-schedule="${formattedSchedule}" data-description="${details.description}" title="Share this activity">
+          <span class="share-icon">🔗</span> Share
+        </button>
+      </div>
       <div class="activity-card-actions">
         ${
           currentUser
@@ -576,6 +581,10 @@ document.addEventListener("DOMContentLoaded", () => {
     deleteButtons.forEach((button) => {
       button.addEventListener("click", handleUnregister);
     });
+
+    // Add click handler for share button
+    const shareButton = activityCard.querySelector(".share-button");
+    shareButton.addEventListener("click", handleShare);
 
     // Add click handler for register button (only when authenticated)
     if (currentUser) {
@@ -673,6 +682,136 @@ document.addEventListener("DOMContentLoaded", () => {
       closeRegistrationModalHandler();
     }
   });
+
+  // Handle share functionality
+  async function handleShare(event) {
+    const button = event.currentTarget;
+    const activityName = button.dataset.activity;
+    const schedule = button.dataset.schedule;
+    const description = button.dataset.description;
+
+    const shareText = `Check out this activity at Mergington High School: ${activityName}\n${description}\nSchedule: ${schedule}`;
+    const shareUrl = window.location.href;
+
+    // Try to use native Web Share API (works on mobile and some desktop browsers)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${activityName} - Mergington High School`,
+          text: shareText,
+          url: shareUrl,
+        });
+        showMessage("Activity shared successfully!", "success");
+      } catch (error) {
+        // User cancelled or error occurred
+        if (error.name !== 'AbortError') {
+          console.error("Error sharing:", error);
+          // Fallback to showing share options
+          showShareModal(activityName, shareText, shareUrl);
+        }
+      }
+    } else {
+      // Fallback: Show share modal with social media options
+      showShareModal(activityName, shareText, shareUrl);
+    }
+  }
+
+  // Show modal with social sharing options
+  function showShareModal(activityName, shareText, shareUrl) {
+    // Create share modal if it doesn't exist
+    let shareModal = document.getElementById("share-modal");
+    if (!shareModal) {
+      shareModal = document.createElement("div");
+      shareModal.id = "share-modal";
+      shareModal.className = "modal hidden";
+      shareModal.innerHTML = `
+        <div class="modal-content">
+          <span class="close-share-modal">&times;</span>
+          <h3>Share Activity</h3>
+          <p id="share-activity-name" style="margin-bottom: 15px; font-weight: bold;"></p>
+          <div class="share-options">
+            <a href="#" id="share-facebook" class="share-option" target="_blank" rel="noopener noreferrer">
+              <span class="share-option-icon">📘</span>
+              <span>Facebook</span>
+            </a>
+            <a href="#" id="share-twitter" class="share-option" target="_blank" rel="noopener noreferrer">
+              <span class="share-option-icon">🐦</span>
+              <span>Twitter</span>
+            </a>
+            <a href="#" id="share-linkedin" class="share-option" target="_blank" rel="noopener noreferrer">
+              <span class="share-option-icon">💼</span>
+              <span>LinkedIn</span>
+            </a>
+            <button id="share-copy-link" class="share-option">
+              <span class="share-option-icon">📋</span>
+              <span>Copy Link</span>
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(shareModal);
+
+      // Add event listener for close button
+      const closeShareModal = shareModal.querySelector(".close-share-modal");
+      closeShareModal.addEventListener("click", () => {
+        shareModal.classList.remove("show");
+        setTimeout(() => {
+          shareModal.classList.add("hidden");
+        }, 300);
+      });
+
+      // Close when clicking outside
+      shareModal.addEventListener("click", (event) => {
+        if (event.target === shareModal) {
+          shareModal.classList.remove("show");
+          setTimeout(() => {
+            shareModal.classList.add("hidden");
+          }, 300);
+        }
+      });
+    }
+
+    // Set the activity name
+    document.getElementById("share-activity-name").textContent = activityName;
+
+    // Set up share links
+    const encodedText = encodeURIComponent(shareText);
+    const encodedUrl = encodeURIComponent(shareUrl);
+
+    document.getElementById("share-facebook").href = 
+      `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+    
+    document.getElementById("share-twitter").href = 
+      `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+    
+    document.getElementById("share-linkedin").href = 
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+
+    // Set up copy link button
+    const copyButton = document.getElementById("share-copy-link");
+    const newCopyButton = copyButton.cloneNode(true);
+    copyButton.parentNode.replaceChild(newCopyButton, copyButton);
+    
+    newCopyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        showMessage("Link copied to clipboard!", "success");
+        shareModal.classList.remove("show");
+        setTimeout(() => {
+          shareModal.classList.add("hidden");
+        }, 300);
+      } catch (error) {
+        console.error("Error copying to clipboard:", error);
+        showMessage("Failed to copy link. Please copy manually.", "error");
+      }
+    });
+
+    // Show the modal
+    shareModal.classList.remove("hidden");
+    setTimeout(() => {
+      shareModal.classList.add("show");
+    }, 10);
+  }
 
   // Create and show confirmation dialog
   function showConfirmationDialog(message, confirmCallback) {
