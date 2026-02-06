@@ -205,6 +205,42 @@ section h3 {
   letter-spacing: 0.3px;
 }
 
+/* Activity tags wrapper for multiple tags */
+.activity-tags {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Difficulty Badge */
+.difficulty-badge {
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.difficulty-beginner {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.difficulty-intermediate {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.difficulty-advanced {
+  background: #ffebee;
+  color: #c62828;
+}
+
 /* Capacity Indicator */
 .capacity-container {
   margin: 8px 0;
@@ -575,6 +611,36 @@ footer {
 
 .time-filters {
   width: 100%;
+}
+
+/* Difficulty filters */
+.difficulty-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.difficulty-filter {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficulty-filter.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary-dark);
+}
+
+.difficulty-filter:hover {
+  background-color: var(--primary-light);
+  color: white;
 }
 
 .reset-button {
