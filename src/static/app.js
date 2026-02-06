@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (savedTheme === "dark") {
     document.body.classList.add("dark-mode");
     darkModeIcon.textContent = "☀️";
+    darkModeToggle.setAttribute("aria-label", "Switch to light mode");
   }
 
   // Toggle dark mode
@@ -15,8 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("dark-mode");
     const isDarkMode = document.body.classList.contains("dark-mode");
     
-    // Update icon
+    // Update icon and aria-label
     darkModeIcon.textContent = isDarkMode ? "☀️" : "🌙";
+    darkModeToggle.setAttribute("aria-label", isDarkMode ? "Switch to light mode" : "Switch to dark mode");
     
     // Save preference
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
