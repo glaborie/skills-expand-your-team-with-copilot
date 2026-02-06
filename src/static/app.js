@@ -51,6 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return div.innerHTML;
   }
 
+  // Helper function to decode HTML entities
+  function decodeHtml(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent;
+  }
+
   // Time range mappings for the dropdown
   const timeRanges = {
     morning: { start: "06:00", end: "08:00" }, // Before school hours
@@ -693,9 +700,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle share functionality
   async function handleShare(event) {
     const button = event.currentTarget;
-    const activityName = button.dataset.activity;
-    const schedule = button.dataset.schedule;
-    const description = button.dataset.description;
+    // Decode HTML entities from data attributes
+    const activityName = decodeHtml(button.dataset.activity);
+    const schedule = decodeHtml(button.dataset.schedule);
+    const description = decodeHtml(button.dataset.description);
 
     const shareText = `Check out this activity at Mergington High School: ${activityName}\n${description}\nSchedule: ${schedule}`;
     const shareUrl = window.location.href;
