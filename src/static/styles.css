@@ -725,3 +725,85 @@ footer {
 #logout-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
+
+/* Share buttons */
+.share-buttons {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: center;
+}
+
+.share-button {
+  background-color: var(--primary-light);
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.share-button:hover {
+  background-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.share-icon {
+  font-size: 1rem;
+}
+
+/* Share modal styles */
+.share-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.share-option:hover {
+  background-color: var(--border-light);
+  border-color: var(--primary-light);
+  transform: translateX(4px);
+}
+
+.share-option-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.close-share-modal {
+  color: var(--text-secondary);
+  float: right;
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 20px;
+  transition: color 0.2s;
+}
+
+.close-share-modal:hover {
+  color: var(--text-primary);
+}
